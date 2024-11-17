@@ -18,7 +18,7 @@ export const notFound = (_req: Request, _res: Response, next: NextFunction): voi
 };
 
 // Error handler middleware
-export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction): void => {
+export const errorHandler = (err: Error, _req: Request, res: Response): void => {
   logger.error(err.message);
 
   if (err instanceof AppError) {

@@ -9,6 +9,8 @@ export const config = {
   DB: {
     // Create you own mongodb URI from Atlas MongoDB and use it here.
     URI: "mongodb+srv://darielavila43:m5JcyIOUCcN6IjfJ@tarlac.yjnmgso.mongodb.net/?retryWrites=true&w=majority&appName=Tarlac",
-    MISSING: "Missing MONGODB_URI",
+    ERROR: "Error connecting to database: ",
+    NOT_INITIALIZED: "Database connection not initialized",
+    CONNECTED: "Connected to database",
   },
 };

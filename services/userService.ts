@@ -24,6 +24,7 @@ export class UserService {
   }
 
   async createUser(userData: Partial<UserModel>): Promise<UserModel> {
+    // You can add hashing here to hash the password of the user. Feel free to modify base on your needs.
     const existingUser = await this.userRepository.searchAndUpdate({ email: userData.email });
     if (existingUser) {
       throw new AppError("User already exists", 400);

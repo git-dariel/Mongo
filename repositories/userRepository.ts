@@ -8,7 +8,7 @@ export class UserRepository {
     return User.findById(id);
   }
 
-  // This methid returns all the user in the database.
+  // This method returns all the user in the database.
   async getUsers(): Promise<UserModel[]> {
     return User.find();
   }

@@ -14,28 +14,33 @@ interface MongooseConnection {
   promise: Promise<Mongoose> | null;
 }
 
-let cached: MongooseConnection = (global as any).mongoose;
+const cached: MongooseConnection = {
+  conn: null,
+  promise: null,
+};
 
-if (!cached) {
-  cached = (global as any).mongoose = {
-    conn: null,
-    promise: null,
-  };
+if (!cached.conn || !cached.promise) {
+  cached.conn = null;
+  cached.promise = mongoose
+    .connect(MONGODB_URI)
+    .then((mongoose: Mongoose) => {
+      logger.info(config.DB.CONNECTED);
+      return mongoose;
+    })
+    .catch((error: Error) => {
+      logger.error(config.DB.ERROR, error);
+      throw error;
+    });
 }
 
 export const connectDatabase = async () => {
-  if (cached.conn) return cached.conn;
+  if (!cached.promise) {
+    throw new Error(config.DB.NOT_INITIALIZED);
+  }
 
-  if (!MONGODB_URI) throw new Error(config.DB.MISSING);
+  if (!cached.conn) {
+    await cached.promise;
+  }
 
-  cached.promise =
-    cached.promise ||
-    mongoose.connect(MONGODB_URI, {
-      dbName: "test",
-      bufferCommands: false,
-    });
-
-  cached.conn = await cached.promise;
-  logger.info("Connected to database");
-  return cached.conn;
+  return mongoose.connection;
 };
