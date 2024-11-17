@@ -12,11 +12,7 @@ export class UserController {
   }
 
   @route.get("/get/:id")
-  getUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  getUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const user = await this.userService.getUser(req.params.id);
       res.json(user);
@@ -26,11 +22,7 @@ export class UserController {
   };
 
   @route.get("/get/all")
-  getUsers = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  getUsers = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const users = await this.userService.getUsers();
       res.json(users);
@@ -40,11 +32,7 @@ export class UserController {
   };
 
   @route.post("/create")
-  create = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const user = await this.userService.createUser(req.body);
       res.status(201).json(user);
@@ -54,11 +42,7 @@ export class UserController {
   };
 
   @route.put("/update")
-  update = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const user = await this.userService.updateUser(req.body);
       res.json(user);
@@ -68,11 +52,7 @@ export class UserController {
   };
 
   @route.delete("/delete")
-  delete = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  delete = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       await this.userService.deleteUser(req.params.id);
       res.send("User deleted successfully");
@@ -82,11 +62,7 @@ export class UserController {
   };
 
   @route.post("/search")
-  search = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  search = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const user = await this.userService.searchUser(req.body);
       res.json(user);
