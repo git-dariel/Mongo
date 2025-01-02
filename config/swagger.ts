@@ -1,6 +1,7 @@
 import { Application } from "express";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import { SwaggerTheme, SwaggerThemeNameEnum } from "swagger-themes";
 
 const options = {
   definition: {
@@ -21,7 +22,14 @@ const options = {
 };
 
 const swaggerSpec = swaggerJSDoc(options);
+const theme = new SwaggerTheme();
 
 export const setupSwagger = (app: Application) => {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+      customCss: theme.getBuffer(SwaggerThemeNameEnum.DARK),
+    })
+  );
 };
