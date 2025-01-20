@@ -13,4 +13,10 @@ export const config = {
     NOT_INITIALIZED: "Database connection not initialized",
     CONNECTED: "Connected to database",
   },
+
+  CLOUDINARY: {
+    CLOUD_NAME: "plaque-dev",
+    API_KEY: "479834719534576",
+    API_SECRET: "0GgNG5UZbls7f2ecgjVbc5AcUtM",
+  },
 };

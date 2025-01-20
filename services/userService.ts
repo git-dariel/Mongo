@@ -32,8 +32,12 @@ export class UserService {
     return this.userRepository.createUser(userData);
   }
 
-  async updateUser(params: Partial<UserModel>): Promise<UserModel | null> {
-    const user = await this.userRepository.updateUser(params._id, params);
+  async updateUser(updateData: Partial<UserModel>): Promise<UserModel | null> {
+    if (!updateData._id) {
+      throw new AppError("User ID is required", 400);
+    }
+
+    const user = await this.userRepository.updateUser(updateData._id, updateData);
     if (!user) {
       throw new AppError("User not found", 404);
     }

@@ -1,14 +1,20 @@
 import { Request, Response, NextFunction } from "express";
 import { UserService } from "../services/userService";
+import { CloudinaryService } from "../services/cloudinaryService";
+import { upload } from "../middleware/multer";
 import { route } from "express-extract-routes";
+import { AppError } from "../middleware/errorHandler";
+import { UseMiddleware } from "../middleware/useMiddleware";
 
 // Purpose: This controller class is responsible for handling the user related requests.
 @route("/user")
 export class UserController {
   private userService: UserService;
+  private cloudinaryService: CloudinaryService;
 
   constructor() {
     this.userService = new UserService();
+    this.cloudinaryService = new CloudinaryService();
   }
 
   /**
@@ -186,4 +192,46 @@ export class UserController {
       next(error);
     }
   };
+
+  /**
+   * @swagger
+   * /user/upload-image/{id}:
+   *   post:
+   *     summary: Upload user profile image
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       content:
+   *         multipart/form-data:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               image:
+   *                 type: string
+   *                 format: binary
+   */
+  @route.post("/upload-image/:id")
+  @UseMiddleware(upload.single("image"))
+  async uploadImage(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.file) {
+        throw new AppError("Please upload an image", 400);
+      }
+
+      const imageUrl = await this.cloudinaryService.uploadImage(req.file);
+      const updateData = {
+        _id: req.params.id,
+        avatar: imageUrl,
+      };
+
+      const user = await this.userService.updateUser(updateData);
+      res.json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

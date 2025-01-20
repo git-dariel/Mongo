@@ -5,6 +5,7 @@ export interface UserModel extends Document {
   username: string;
   email: string;
   password: string;
+  avatar: string;
 }
 
 const UserSchema = new Schema<UserModel>(
@@ -21,6 +22,10 @@ const UserSchema = new Schema<UserModel>(
     password: {
       type: String,
       required: true,
+    },
+    avatar: {
+      type: String,
+      default: null,
     },
   },
   { timestamps: true }
