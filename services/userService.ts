@@ -1,6 +1,6 @@
 import { UserRepository } from "../repositories/userRepository";
 import { AppError } from "../middleware/errorHandler";
-import { UserModel } from "../models/userModel";
+import { UserModel, UserModelZodSchema } from "../models/userModel";
 import { FilterQuery } from "mongoose";
 import { ParsedQueryOptions } from "../helpers/queryBuilder";
 
