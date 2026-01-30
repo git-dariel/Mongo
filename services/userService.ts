@@ -1,8 +1,8 @@
-import { UserRepository } from "../repositories/userRepository";
-import { AppError } from "../middleware/errorHandler";
-import { UserModel, UserModelZodSchema } from "../models/userModel";
 import { FilterQuery } from "mongoose";
 import { ParsedQueryOptions } from "../helpers/queryBuilder";
+import { AppError } from "../middleware/errorHandler";
+import { UserModel } from "../models/userModel";
+import { UserRepository } from "../repositories/userRepository";
 
 // *Purpose: This service class is responsible for handling the business logic of the user entity. It interacts with the user repository to perform CRUD operations on the user entity.
 export class UserService {

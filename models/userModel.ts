@@ -1,5 +1,4 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { z } from "zod";
 
 // Purpose: Define the user model schema
 export interface UserModel extends Document {
@@ -8,14 +7,6 @@ export interface UserModel extends Document {
   password: string;
   avatar: string;
 }
-
-// for runtime validations
-export const UserModelZodSchema = z.object({
-  username: z.optional(z.string()),
-  email: z.optional(z.string()),
-  password: z.optional(z.string()),
-  avatar: z.optional(z.string()),
-});
 
 const UserSchema = new Schema<UserModel>(
   {
