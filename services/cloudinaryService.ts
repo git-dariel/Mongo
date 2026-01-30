@@ -17,7 +17,7 @@ export class CloudinaryService {
 
       return result.secure_url;
     } catch (error) {
-      throw new AppError("Error uploading image to Cloudinary", 500);
+      throw new AppError("Error uploading image to Cloudinary", 500, false);
     }
   }
 
@@ -25,7 +25,7 @@ export class CloudinaryService {
     try {
       await cloudinary.uploader.destroy(publicId);
     } catch (error) {
-      throw new AppError("Error deleting image from Cloudinary", 500);
+      throw new AppError("Error deleting image from Cloudinary", 500, false);
     }
   }
 }

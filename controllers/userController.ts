@@ -5,6 +5,7 @@ import { upload } from "../middleware/multer";
 import { route } from "express-extract-routes";
 import { AppError } from "../middleware/errorHandler";
 import { UseMiddleware } from "../middleware/useMiddleware";
+import { QueryBuilder, QueryOptions } from "../helpers/queryBuilder";
 
 // Purpose: This controller class is responsible for handling the user related requests.
 @route("/user")
@@ -19,9 +20,10 @@ export class UserController {
 
   /**
    * @swagger
-   * /user/get/{id}:
+   * /user/{id}:
    *   get:
    *     summary: Get a user by ID
+   *     tags: [User]
    *     parameters:
    *       - in: path
    *         name: id
@@ -35,10 +37,15 @@ export class UserController {
    *       404:
    *         description: User not found
    */
-  @route.get("/get/:id")
+  @route.get("/:id")
   getUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const user = await this.userService.getUser(req.params.id);
+      const queryOptions: QueryOptions = {
+        fields: req.query.fields as string,
+        populate: req.query.populate as string,
+      };
+      const parsedOptions = QueryBuilder.parse(queryOptions);
+      const user = await this.userService.getUser(req.params.id, parsedOptions);
       res.json(user);
     } catch (error) {
       next(error);
@@ -47,19 +54,29 @@ export class UserController {
 
   /**
    * @swagger
-   * /user/get/all:
+   * /user/:
    *   get:
    *     summary: Get the users
+   *     tags: [User]
    *     responses:
    *       200:
    *         description: The user data
    *       404:
    *         description: User not found
    */
-  @route.get("/get/all")
-  getUsers = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+  @route.get("/")
+  getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const users = await this.userService.getUsers();
+      const queryOptions: QueryOptions = {
+        fields: req.query.fields as string,
+        limit: req.query.limit as unknown as number,
+        sort: req.query.sort as string,
+        order: req.query.order as "asc" | "desc",
+        filter: req.query.filter as string,
+        populate: req.query.populate as string,
+      };
+      const parsedOptions = QueryBuilder.parse(queryOptions);
+      const users = await this.userService.getUsers(parsedOptions);
       res.json(users);
     } catch (error) {
       next(error);
@@ -68,9 +85,10 @@ export class UserController {
 
   /**
    * @swagger
-   * /user/create:
+   * /user/:
    *   post:
    *     summary: Create a new user
+   *     tags: [User]
    *     requestBody:
    *      required: true
    *      content:
@@ -90,7 +108,7 @@ export class UserController {
    *       404:
    *         description: User not found
    */
-  @route.post("/create")
+  @route.post("/")
   create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const user = await this.userService.createUser(req.body);
@@ -102,9 +120,10 @@ export class UserController {
 
   /**
    * @swagger
-   * /user/update:
+   * /user/:
    *   put:
    *     summary: Update a user
+   *     tags: [User]
    *     requestBody:
    *      required: true
    *      content:
@@ -124,7 +143,7 @@ export class UserController {
    *       404:
    *         description: User not found
    */
-  @route.put("/update")
+  @route.put("/")
   update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const user = await this.userService.updateUser(req.body);
@@ -136,9 +155,10 @@ export class UserController {
 
   /**
    * @swagger
-   * /user/delete/{id}:
+   * /user/{id}:
    *   delete:
    *     summary: Delete a user by ID
+   *     tags: [User]
    *     parameters:
    *       - in: path
    *         name: id
@@ -152,7 +172,7 @@ export class UserController {
    *       404:
    *         description: User not found
    */
-  @route.delete("/delete")
+  @route.delete("/")
   delete = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       await this.userService.deleteUser(req.params.id);
@@ -167,6 +187,7 @@ export class UserController {
    * /user/search:
    *   post:
    *     summary: Search for a user
+   *     tags: [User]
    *     requestBody:
    *       required: true
    *       content:
@@ -198,6 +219,7 @@ export class UserController {
    * /user/upload-image/{id}:
    *   post:
    *     summary: Upload user profile image
+   *     tags: [User]
    *     parameters:
    *       - in: path
    *         name: id
@@ -218,18 +240,10 @@ export class UserController {
   @UseMiddleware(upload.single("image"))
   async uploadImage(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      if (!req.file) {
-        throw new AppError("Please upload an image", 400);
-      }
+      if (!req.file) throw new AppError("Please upload an image", 400);
 
       const imageUrl = await this.cloudinaryService.uploadImage(req.file);
-      const updateData = {
-        _id: req.params.id,
-        avatar: imageUrl,
-      };
-
-      const user = await this.userService.updateUser(updateData);
-      res.json(user);
+      res.json(await this.userService.updateUser({ _id: req.params.id, avatar: imageUrl }));
     } catch (error) {
       next(error);
     }

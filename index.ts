@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import { createApp } from "./config/app";
 import { connectDatabase } from "./config/database";
 import { config } from "./config/constants";
+import { logger } from "./helpers/logger";
 import "reflect-metadata";
 
 dotenv.config();
@@ -15,10 +16,10 @@ const startServer = async () => {
     const port = process.env.PORT || config.PORT;
 
     app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
+      logger.info(`Server is running on port ${port}`);
     });
   } catch (error) {
-    console.log("Failed to start server:", error);
+    logger.error("Failed to start server", {error});
     process.exit(1);
   }
 };
