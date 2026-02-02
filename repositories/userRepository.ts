@@ -5,8 +5,6 @@ import { sanitizeSelect } from "../helpers/common";
 
 // Purpose: This file is responsible for handling all the database operations related to the user model.
 export class UserRepository {
-
-
   async getUser(id: string, options?: ParsedQueryOptions): Promise<UserModel | null> {
     let query: any = User.findById(id);
 
@@ -37,10 +35,8 @@ export class UserRepository {
     }
 
     if (options?.sort) query = query.sort(options.sort);
-    
 
     if (options?.limit) query = query.limit(options.limit);
-    
 
     if (options?.populate && options.populate.length > 0) {
       options.populate.forEach((path) => {
@@ -63,7 +59,6 @@ export class UserRepository {
     return User.findByIdAndDelete(id);
   }
 
-
   async searchUser(query: FilterQuery<UserModel>): Promise<UserModel | null> {
     return (User.findOne(query).select("-password") as any).exec();
   }
@@ -71,7 +66,7 @@ export class UserRepository {
   async searchAndUpdate(
     query: FilterQuery<UserModel>,
     update?: UpdateQuery<UserModel>,
-    options?: { multi?: boolean }
+    options?: { multi?: boolean },
   ): Promise<UserModel | null | { modifiedCount: number }> {
     if (!update) {
       return (User.findOne(query).select("-password") as any).exec();
