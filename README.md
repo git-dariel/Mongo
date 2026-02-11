@@ -14,7 +14,7 @@ A robust and scalable MongoDB template using Express.js and TypeScript, designed
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/git-dariel/Mongo.git
+git clone https://github.com/git-dariel/mongo.git
 cd Mongo
 ```
 
