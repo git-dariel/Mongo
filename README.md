@@ -60,6 +60,11 @@ npm run dev
 └── index.ts       # Express app initialization
 ```
 
+## AI Workflow
+
+This repository includes a lightweight AI agent workflow for planning, architecture decisions, and review.
+See [ai/README.md](ai/README.md) for the process overview and [ai/TODO.md](ai/TODO.md) for the task ledger.
+
 ## 🔒 Environment Variables
 
 | Variable    | Description            | Default     |
