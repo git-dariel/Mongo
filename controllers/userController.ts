@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { UserService } from "../services/userService";
-import { CloudinaryService } from "../services/cloudinaryService";
+import { Cloudinary } from "../helpers/cloudinary";
 import { upload } from "../middleware/multer";
 import { route } from "express-extract-routes";
 import { AppError } from "../middleware/errorHandler";
@@ -11,11 +11,11 @@ import { QueryBuilder, QueryOptions } from "../helpers/queryBuilder";
 @route("/user")
 export class UserController {
   private userService: UserService;
-  private cloudinaryService: CloudinaryService;
+  private cloudinary: Cloudinary;
 
   constructor() {
     this.userService = new UserService();
-    this.cloudinaryService = new CloudinaryService();
+    this.cloudinary = new Cloudinary();
   }
 
   /**
@@ -242,7 +242,7 @@ export class UserController {
     try {
       if (!req.file) throw new AppError("Please upload an image", 400);
 
-      const imageUrl = await this.cloudinaryService.uploadImage(req.file);
+      const imageUrl = await this.cloudinary.uploadImage(req.file);
       res.json(await this.userService.updateUser({ _id: req.params.id, avatar: imageUrl }));
     } catch (error) {
       next(error);

@@ -1,7 +1,7 @@
 import { cloudinary } from "../config/cloudinary";
 import { AppError } from "../middleware/errorHandler";
 
-export class CloudinaryService {
+export class Cloudinary {
   async uploadImage(file: Express.Multer.File): Promise<string> {
     try {
       const b64 = Buffer.from(file.buffer).toString("base64");
