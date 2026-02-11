@@ -9,7 +9,7 @@
     "build": "tsc",
     "lint": "eslint . --fix",
     "test": "jest",
-    "postinstall": "npm run build"
+    "postinstall": "pnpm run build"
   },
   "dependencies": {
     "cloudinary": "^2.5.1",

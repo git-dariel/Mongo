@@ -7,7 +7,7 @@ A robust and scalable MongoDB template using Express.js and TypeScript, designed
 - Node.js (v14 or higher)
 - MongoDB (v4.4 or higher)
 - TypeScript (v4.5 or higher)
-- npm or yarn
+- pnpm
 
 ## 🚀 Quick Start
 
@@ -21,7 +21,7 @@ cd Mongo
 2. Install dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 3. Create a `.env` file in the root directory:
@@ -35,16 +35,16 @@ NODE_ENV=development
 4. Start the development server:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ## 🛠️ Scripts
 
-- `npm run dev`: Start development server with hot-reload
-- `npm run build`: Build for production
-- `npm start`: Start production server
-- `npm run lint`: Run ESLint
-- `npm test`: Run tests
+- `pnpm run dev`: Start development server with hot-reload
+- `pnpm run build`: Build for production
+- `pnpm start`: Start production server
+- `pnpm run lint`: Run ESLint
+- `pnpm test`: Run tests
 
 ## 📁 Project Structure
 

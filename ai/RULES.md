@@ -20,7 +20,7 @@ These rules define how agents operate in this codebase. They prioritize clarity,
 
 ## Quality Bar
 
-- Code must compile with `npm run build` and lint with `npm run lint` when code changes.
+- Code must compile with `pnpm run build` and lint with `pnpm run lint` when code changes.
 - Tests are required for logic-heavy changes; add or update Jest tests under the relevant area.
 - No sensitive data in logs or responses.
 - Error handling should be centralized when possible.
